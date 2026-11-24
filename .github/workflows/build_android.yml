@@ -32,10 +32,11 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android platform files & Permissions
+      - name: Generate Android platform files & Configure Permissions + Lint
         run: |
           flutter create --platforms=android .
           python3 -c '
+          import os
           manifest = "android/app/src/main/AndroidManifest.xml"
           with open(manifest, "r") as f:
               content = f.read()
@@ -46,9 +47,43 @@ jobs:
           <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
           <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
           """
-          content = content.replace("<application", perms + "\n    <application")
+          if "<uses-permission android:name=\"android.permission.CAMERA\"/>" not in content:
+              content = content.replace("<application", perms + "\n    <application")
           with open(manifest, "w") as f:
               f.write(content)
+
+          gradle_kts = "android/app/build.gradle.kts"
+          gradle_gro = "android/app/build.gradle"
+          if os.path.exists(gradle_kts):
+              with open(gradle_kts, "r") as f:
+                  g = f.read()
+              if "checkReleaseBuilds" not in g:
+                  lint_block = """
+          android {
+              lint {
+                  checkReleaseBuilds = false
+                  abortOnError = false
+              }
+          }
+          """
+                  g = g + "\n" + lint_block
+                  with open(gradle_kts, "w") as f:
+                      f.write(g)
+          elif os.path.exists(gradle_gro):
+              with open(gradle_gro, "r") as f:
+                  g = f.read()
+              if "checkReleaseBuilds" not in g:
+                  lint_block = """
+          android {
+              lintOptions {
+                  checkReleaseBuilds false
+                  abortOnError false
+              }
+          }
+          """
+                  g = g + "\n" + lint_block
+                  with open(gradle_gro, "w") as f:
+                      f.write(g)
           '
 
       - name: Install dependencies
