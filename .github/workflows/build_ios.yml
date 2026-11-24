@@ -35,10 +35,17 @@ jobs:
               plistlib.dump(pl, f)
           '
 
-      - name: Install dependencies & Generate App Icons
+      - name: Install dependencies & Generate iOS Icons
         run: |
+          cat << 'EOF' > flutter_launcher_icons_ios.yaml
+          flutter_launcher_icons:
+            android: false
+            ios: true
+            image_path: "assets/icon/app_icon.png"
+            remove_alpha_ios: true
+          EOF
           flutter pub get
-          dart run flutter_launcher_icons
+          dart run flutter_launcher_icons -f flutter_launcher_icons_ios.yaml
 
       - name: Build iOS (No Codesign)
         run: flutter build ios --release --no-codesign

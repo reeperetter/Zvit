@@ -72,10 +72,18 @@ jobs:
                       f.write(g)
           '
 
-      - name: Install dependencies & Generate App Icons
+      - name: Install dependencies & Generate Android Icons
         run: |
+          cat << 'EOF' > flutter_launcher_icons_android.yaml
+          flutter_launcher_icons:
+            android: true
+            ios: false
+            image_path: "assets/icon/app_icon.png"
+            adaptive_icon_background: "#184673"
+            adaptive_icon_foreground: "assets/icon/app_icon_fg.png"
+          EOF
           flutter pub get
-          dart run flutter_launcher_icons
+          dart run flutter_launcher_icons -f flutter_launcher_icons_android.yaml
 
       - name: Build Android APK
         run: |
