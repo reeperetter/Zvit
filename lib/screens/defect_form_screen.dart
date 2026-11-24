@@ -137,7 +137,7 @@ class _DefectFormScreenState extends State<DefectFormScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.t('add_defect')),
+        title: Text(widget.existingDefect == null ? AppStrings.t('add_defect') : AppStrings.t('edit_defect')),
         actions: [
           IconButton(icon: const Icon(Icons.check), onPressed: _save),
         ],
@@ -215,9 +215,10 @@ class _DefectFormScreenState extends State<DefectFormScreen> {
                 const SizedBox(width: 8),
                 DropdownButton<String>(
                   value: _voiceLocale,
-                  items: const [
-                    DropdownMenuItem(value: 'pl_PL', child: Text('Głos: PL')),
-                    DropdownMenuItem(value: 'uk_UA', child: Text('Голос: UA')),
+                  items: [
+                    DropdownMenuItem(value: 'pl_PL', child: Text('${AppStrings.t('voice_lang_label')}: PL')),
+                    DropdownMenuItem(value: 'uk_UA', child: Text('${AppStrings.t('voice_lang_label')}: UA')),
+                    DropdownMenuItem(value: 'en_US', child: Text('${AppStrings.t('voice_lang_label')}: EN')),
                   ],
                   onChanged: (v) => setState(() => _voiceLocale = v!),
                 ),
@@ -258,6 +259,15 @@ class _DefectFormScreenState extends State<DefectFormScreen> {
               items: dict.contractors.map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
               onChanged: (v) => setState(() => _contractor = v!),
             ),
+            const SizedBox(height: 10),
+            DropdownButtonFormField<String>(
+              value: _defectType,
+              decoration: InputDecoration(labelText: AppStrings.t('defect_type')),
+              items: ['Budowlana', 'Instalacyjna', 'Wykończeniowa']
+                  .map((t) => DropdownMenuItem(value: t, child: Text(AppStrings.localizeValue(t))))
+                  .toList(),
+              onChanged: (v) => setState(() => _defectType = v!),
+            ),
             const SizedBox(height: 12),
             Row(
               children: [
@@ -271,7 +281,7 @@ class _DefectFormScreenState extends State<DefectFormScreen> {
                 Expanded(
                   child: TextField(
                     controller: _normCtrl,
-                    decoration: const InputDecoration(labelText: 'Norma (np. PN-B-10110)'),
+                    decoration: InputDecoration(labelText: AppStrings.t('norm_ref')),
                   ),
                 ),
               ],
@@ -284,7 +294,7 @@ class _DefectFormScreenState extends State<DefectFormScreen> {
                     value: _priority,
                     decoration: InputDecoration(labelText: AppStrings.t('priority')),
                     items: ['Niski', 'Normalny', 'Wysoki', 'Krytyczny']
-                        .map((p) => DropdownMenuItem(value: p, child: Text(p)))
+                        .map((p) => DropdownMenuItem(value: p, child: Text(AppStrings.localizeValue(p))))
                         .toList(),
                     onChanged: (v) => setState(() => _priority = v!),
                   ),
@@ -295,7 +305,7 @@ class _DefectFormScreenState extends State<DefectFormScreen> {
                     value: _status,
                     decoration: InputDecoration(labelText: AppStrings.t('status')),
                     items: ['Nowa', 'W trakcie realizacji', 'Do odbioru', 'Usunięta']
-                        .map((s) => DropdownMenuItem(value: s, child: Text(s)))
+                        .map((s) => DropdownMenuItem(value: s, child: Text(AppStrings.localizeValue(s))))
                         .toList(),
                     onChanged: (v) => setState(() => _status = v!),
                   ),

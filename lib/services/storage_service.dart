@@ -10,11 +10,11 @@ class StorageService extends ChangeNotifier {
 
   Future<Directory> get _appDir async {
     final dir = await getApplicationDocumentsDirectory();
-    final zvitDir = Directory('${dir.path}/zvit_data');
-    if (!await zvitDir.exists()) {
-      await zvitDir.create(recursive: true);
+    final qDir = Directory('${dir.path}/qreport_data');
+    if (!await qDir.exists()) {
+      await qDir.create(recursive: true);
     }
-    return zvitDir;
+    return qDir;
   }
 
   Future<void> init() async {

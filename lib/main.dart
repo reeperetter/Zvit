@@ -11,21 +11,21 @@ void main() async {
   runApp(
     ChangeNotifierProvider.value(
       value: storage,
-      child: const ZvitApp(),
+      child: const QReportApp(),
     ),
   );
 }
 
-class ZvitApp extends StatelessWidget {
-  const ZvitApp({super.key});
+class QReportApp extends StatelessWidget {
+  const QReportApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Zvit',
+      title: 'QReport',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF1B4965)),
+        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF184673)),
         useMaterial3: true,
         inputDecorationTheme: const InputDecorationTheme(
           border: OutlineInputBorder(),

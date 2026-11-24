@@ -1,5 +1,5 @@
-name: zvit
-description: System protokołów odbioru technicznego mieszkań (PL/UA/EN).
+name: qreport
+description: QReport — Technical Snagging & Inspection Protocol System (PL/UA/EN).
 publish_to: 'none'
 version: 1.0.0+1
 
@@ -12,7 +12,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   provider: ^6.1.2
   path_provider: ^2.1.4
-  image_picker: ^1.1.2
+  image_picker: ^1.2.0
   speech_to_text: ^7.0.0
   permission_handler: ^11.3.1
   pdf: ^3.11.1
@@ -26,6 +26,17 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.3
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#184673"
+  adaptive_icon_foreground: "assets/icon/app_icon_fg.png"
+  remove_alpha_ios: true
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icon/

@@ -17,7 +17,11 @@ class _DictionariesScreenState extends State<DictionariesScreen> {
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(AppStrings.t('add_item')),
-        content: TextField(controller: ctrl, autofocus: true),
+        content: TextField(
+          controller: ctrl,
+          autofocus: true,
+          decoration: InputDecoration(labelText: AppStrings.t('enter_value')),
+        ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(ctx), child: Text(AppStrings.t('cancel'))),
           FilledButton(
@@ -46,6 +50,7 @@ class _DictionariesScreenState extends State<DictionariesScreen> {
           title: Text(list[i]),
           trailing: IconButton(
             icon: const Icon(Icons.delete_outline, color: Colors.red),
+            tooltip: AppStrings.t('delete'),
             onPressed: () async {
               setState(() => list.removeAt(i));
               await storage.saveDictionaries();

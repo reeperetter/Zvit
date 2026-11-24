@@ -86,14 +86,18 @@ class _ProjectScreenState extends State<ProjectScreen> {
                           : Colors.blue.shade100,
                       child: Text('#${d.number}', style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    title: Text('${d.room} • ${d.subCategoryCode}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                    title: Text(
+                      '${d.room} • ${d.subCategoryCode}',
+                      style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
+                    ),
                     subtitle: Text(
-                      '${d.description}\n${d.contractor} | ${d.priority} | Фото: ${d.photoPaths.length}',
+                      '${d.description}\n${d.contractor} | ${AppStrings.localizeValue(d.priority)} | ${AppStrings.t('photos_count')}: ${d.photoPaths.length}',
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
                     trailing: IconButton(
                       icon: const Icon(Icons.delete_outline),
+                      tooltip: AppStrings.t('delete'),
                       onPressed: () async {
                         final updated = List<DefectItem>.from(project.defects)..removeAt(index);
                         await storage.addOrUpdateProject(project.copyWith(defects: updated));

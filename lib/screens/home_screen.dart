@@ -49,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 10),
                 TextField(
                   controller: protoNumCtrl,
-                  decoration: const InputDecoration(labelText: 'Nr protokołu (np. #101)'),
+                  decoration: InputDecoration(labelText: AppStrings.t('protocol_number')),
                 ),
                 const SizedBox(height: 10),
                 DropdownButtonFormField<String>(
@@ -83,9 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 10),
                 TextField(
                   controller: meterCtrl,
-                  decoration: const InputDecoration(
-                    labelText: 'Liczniki / Pogoda (opcjonalnie)',
-                  ),
+                  decoration: InputDecoration(labelText: AppStrings.t('meters_weather')),
                 ),
               ],
             ),
@@ -120,13 +118,30 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Future<void> _confirmDeleteProject(BuildContext context, StorageService storage, InspectionProject proj) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(AppStrings.t('confirm_delete')),
+        content: Text(AppStrings.t('confirm_delete_msg')),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx, false), child: Text(AppStrings.t('cancel'))),
+          FilledButton(onPressed: () => Navigator.pop(ctx, true), child: Text(AppStrings.t('delete'))),
+        ],
+      ),
+    );
+    if (ok == true) {
+      await storage.deleteProject(proj.id);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final storage = context.watch<StorageService>();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.t('app_title'), style: const TextStyle(fontSize: 18)),
+        title: Text(AppStrings.t('app_title'), style: const TextStyle(fontSize: 17)),
         actions: [
           SegmentedButton<String>(
             segments: const [
@@ -157,9 +172,13 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: storage.projects.isEmpty
           ? Center(
-              child: Text(
-                AppStrings.t('new_project'),
-                style: Theme.of(context).textTheme.titleMedium,
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  AppStrings.t('empty_projects_hint'),
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
               ),
             )
           : ListView.builder(
@@ -183,7 +202,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     isThreeLine: true,
                     trailing: IconButton(
                       icon: const Icon(Icons.delete_outline, color: Colors.red),
-                      onPressed: () => storage.deleteProject(proj.id),
+                      tooltip: AppStrings.t('delete'),
+                      onPressed: () => _confirmDeleteProject(context, storage, proj),
                     ),
                     onTap: () {
                       Navigator.push(

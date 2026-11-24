@@ -45,7 +45,7 @@ class PdfService {
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
                 pw.Text(
-                  'Usterki — ${project.protocolType} ${project.protocolNumber} — produkt ${project.productCode} (${project.defects.length})',
+                  'QReport | Usterki — ${project.protocolType} ${project.protocolNumber} — produkt ${project.productCode} (${project.defects.length})',
                   style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold),
                 ),
                 pw.Text('Data: $dateStr', style: const pw.TextStyle(fontSize: 9)),
@@ -187,10 +187,10 @@ class PdfService {
 
     final dir = await getTemporaryDirectory();
     final safeCode = project.productCode.replaceAll(RegExp(r'[^a-zA-Z0-9_-]'), '_');
-    final file = File('${dir.path}/Protokol_${safeCode}_${project.protocolNumber.replaceAll('#', '')}.pdf');
+    final file = File('${dir.path}/QReport_${safeCode}_${project.protocolNumber.replaceAll('#', '')}.pdf');
     await file.writeAsBytes(await pdf.save());
 
-    await Share.shareXFiles([XFile(file.path)], text: 'Protokół odbioru ${project.productCode}');
+    await Share.shareXFiles([XFile(file.path)], text: 'QReport — Protokół odbioru ${project.productCode}');
   }
 
   static pw.Widget _cellHeader(String text) => pw.Padding(
