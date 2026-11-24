@@ -79,12 +79,12 @@ class _DefectFormScreenState extends State<DefectFormScreen> {
       setState(() => _isListening = false);
     } else {
       setState(() => _isListening = true);
-      final baseText = _descCtrl.text.isEmpty ? '' : '\${_descCtrl.text} ';
+      final baseText = _descCtrl.text.isEmpty ? '' : '${_descCtrl.text} ';
       await _voiceService.startListening(
         localeId: _voiceLocale,
         onResult: (words) {
           setState(() {
-            _descCtrl.text = '\$baseText\$words';
+            _descCtrl.text = '$baseText$words';
           });
         },
       );

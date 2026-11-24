@@ -55,11 +55,11 @@ class ExcelService {
 
     final dir = await getTemporaryDirectory();
     final safeCode = project.productCode.replaceAll(RegExp(r'[^a-zA-Z0-9_-]'), '_');
-    final file = File('\${dir.path}/Usterki_\$safeCode.xlsx');
+    final file = File('${dir.path}/Usterki_$safeCode.xlsx');
     final bytes = excel.encode();
     if (bytes != null) {
       await file.writeAsBytes(bytes);
-      await Share.shareXFiles([XFile(file.path)], text: 'Zestawienie usterek Excel \${project.productCode}');
+      await Share.shareXFiles([XFile(file.path)], text: 'Zestawienie usterek Excel ${project.productCode}');
     }
   }
 }

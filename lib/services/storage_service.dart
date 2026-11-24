@@ -10,7 +10,7 @@ class StorageService extends ChangeNotifier {
 
   Future<Directory> get _appDir async {
     final dir = await getApplicationDocumentsDirectory();
-    final zvitDir = Directory('\${dir.path}/zvit_data');
+    final zvitDir = Directory('${dir.path}/zvit_data');
     if (!await zvitDir.exists()) {
       await zvitDir.create(recursive: true);
     }
@@ -19,14 +19,14 @@ class StorageService extends ChangeNotifier {
 
   Future<void> init() async {
     final dir = await _appDir;
-    final projFile = File('\${dir.path}/projects.json');
+    final projFile = File('${dir.path}/projects.json');
     if (await projFile.exists()) {
       final raw = await projFile.readAsString();
       final List<dynamic> decoded = jsonDecode(raw);
       projects = decoded.map((e) => InspectionProject.fromJson(e)).toList();
     }
 
-    final dictFile = File('\${dir.path}/dictionaries.json');
+    final dictFile = File('${dir.path}/dictionaries.json');
     if (await dictFile.exists()) {
       final raw = await dictFile.readAsString();
       dictionaries = AppDictionaries.fromJson(jsonDecode(raw));
@@ -38,7 +38,7 @@ class StorageService extends ChangeNotifier {
 
   Future<void> saveProjects() async {
     final dir = await _appDir;
-    final projFile = File('\${dir.path}/projects.json');
+    final projFile = File('${dir.path}/projects.json');
     await projFile.writeAsString(
       jsonEncode(projects.map((e) => e.toJson()).toList()),
     );
@@ -47,19 +47,19 @@ class StorageService extends ChangeNotifier {
 
   Future<void> saveDictionaries() async {
     final dir = await _appDir;
-    final dictFile = File('\${dir.path}/dictionaries.json');
+    final dictFile = File('${dir.path}/dictionaries.json');
     await dictFile.writeAsString(jsonEncode(dictionaries.toJson()));
     notifyListeners();
   }
 
   Future<String> saveImageLocally(File tempFile) async {
     final dir = await _appDir;
-    final photosDir = Directory('\${dir.path}/photos');
+    final photosDir = Directory('${dir.path}/photos');
     if (!await photosDir.exists()) {
       await photosDir.create(recursive: true);
     }
-    final fileName = 'img_\${DateTime.now().millisecondsSinceEpoch}.jpg';
-    final saved = await tempFile.copy('\${photosDir.path}/\$fileName');
+    final fileName = 'img_${DateTime.now().millisecondsSinceEpoch}.jpg';
+    final saved = await tempFile.copy('${photosDir.path}/$fileName');
     return saved.path;
   }
 

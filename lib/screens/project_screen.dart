@@ -50,7 +50,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          title: Text('\${project.productCode} (\${project.protocolNumber})'),
+          title: Text('${project.productCode} (${project.protocolNumber})'),
           actions: [
             IconButton(
               icon: const Icon(Icons.picture_as_pdf, color: Colors.red),
@@ -65,7 +65,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
           ],
           bottom: TabBar(
             tabs: [
-              Tab(icon: const Icon(Icons.list_alt), text: '\${AppStrings.t('defects')} (\${project.defects.length})'),
+              Tab(icon: const Icon(Icons.list_alt), text: '${AppStrings.t('defects')} (${project.defects.length})'),
               Tab(icon: const Icon(Icons.map_outlined), text: AppStrings.t('floor_plan')),
             ],
           ),
@@ -84,11 +84,11 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       backgroundColor: d.priority == 'Krytyczny' || d.priority == 'Wysoki'
                           ? Colors.red.shade100
                           : Colors.blue.shade100,
-                      child: Text('#\${d.number}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                      child: Text('#${d.number}', style: const TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                    title: Text('\${d.room} • \${d.subCategoryCode}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                    title: Text('${d.room} • ${d.subCategoryCode}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
                     subtitle: Text(
-                      '\${d.description}\n\${d.contractor} | \${d.priority} | Фото: \${d.photoPaths.length}',
+                      '${d.description}\n${d.contractor} | ${d.priority} | Фото: ${d.photoPaths.length}',
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -162,7 +162,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                               ),
                                               alignment: Alignment.center,
                                               child: Text(
-                                                '\${d.number}',
+                                                '${d.number}',
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                   fontSize: 11,

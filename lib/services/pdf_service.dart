@@ -45,20 +45,20 @@ class PdfService {
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
                 pw.Text(
-                  'Usterki — \${project.protocolType} \${project.protocolNumber} — produkt \${project.productCode} (\${project.defects.length})',
+                  'Usterki — ${project.protocolType} ${project.protocolNumber} — produkt ${project.productCode} (${project.defects.length})',
                   style: pw.TextStyle(fontSize: 13, fontWeight: pw.FontWeight.bold),
                 ),
-                pw.Text('Data: \$dateStr', style: const pw.TextStyle(fontSize: 9)),
+                pw.Text('Data: $dateStr', style: const pw.TextStyle(fontSize: 9)),
               ],
             ),
             pw.SizedBox(height: 4),
             pw.Text(
-              'Adres: \${project.address} | Deweloper: \${project.developerName} | Nabywca: \${project.clientName} | Inspektor: \${project.inspectorName}',
+              'Adres: ${project.address} | Deweloper: ${project.developerName} | Nabywca: ${project.clientName} | Inspektor: ${project.inspectorName}',
               style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey700),
             ),
             if (project.weatherAndMeter.isNotEmpty)
               pw.Text(
-                'Warunki / Liczniki: \${project.weatherAndMeter}',
+                'Warunki / Liczniki: ${project.weatherAndMeter}',
                 style: const pw.TextStyle(fontSize: 8, color: PdfColors.grey700),
               ),
             pw.Divider(thickness: 1, color: PdfColors.grey400),
@@ -72,7 +72,7 @@ class PdfService {
               style: const pw.TextStyle(fontSize: 8),
             ),
             pw.Text(
-              'Strona \${context.pageNumber} z \${context.pagesCount}',
+              'Strona ${context.pageNumber} z ${context.pagesCount}',
               style: const pw.TextStyle(fontSize: 8),
             ),
           ],
@@ -127,7 +127,7 @@ class PdfService {
                 final dDate = DateFormat('yyyy-MM-dd').format(d.createdAt);
                 return pw.TableRow(
                   children: [
-                    _cellText('\${d.number}', bold: true),
+                    _cellText('${d.number}', bold: true),
                     _cellText(d.room, bold: true),
                     _cellText(d.contractor),
                     _cellText(d.category),
@@ -142,7 +142,7 @@ class PdfService {
                             pw.Padding(
                               padding: const pw.EdgeInsets.only(top: 2),
                               child: pw.Text(
-                                'Pomiar/Norma: \${d.deviationValue} \${d.normReference}',
+                                'Pomiar/Norma: ${d.deviationValue} ${d.normReference}',
                                 style: pw.TextStyle(
                                   fontSize: 7.5,
                                   fontWeight: pw.FontWeight.bold,
@@ -175,7 +175,7 @@ class PdfService {
                     ),
                     _cellText(d.priority),
                     _cellText(d.status),
-                    _cellText('\${d.defectType}\n\$dDate'),
+                    _cellText('${d.defectType}\n$dDate'),
                   ],
                 );
               }),
@@ -187,10 +187,10 @@ class PdfService {
 
     final dir = await getTemporaryDirectory();
     final safeCode = project.productCode.replaceAll(RegExp(r'[^a-zA-Z0-9_-]'), '_');
-    final file = File('\${dir.path}/Protokol_\${safeCode}_\${project.protocolNumber.replaceAll('#', '')}.pdf');
+    final file = File('${dir.path}/Protokol_${safeCode}_${project.protocolNumber.replaceAll('#', '')}.pdf');
     await file.writeAsBytes(await pdf.save());
 
-    await Share.shareXFiles([XFile(file.path)], text: 'Protokół odbioru \${project.productCode}');
+    await Share.shareXFiles([XFile(file.path)], text: 'Protokół odbioru ${project.productCode}');
   }
 
   static pw.Widget _cellHeader(String text) => pw.Padding(

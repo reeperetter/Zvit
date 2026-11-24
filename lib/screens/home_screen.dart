@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _showCreateProjectDialog(BuildContext context) {
     final storage = context.read<StorageService>();
     final codeCtrl = TextEditingController(text: '1-12.A.1.1');
-    final protoNumCtrl = TextEditingController(text: '#\${101 + storage.projects.length}');
+    final protoNumCtrl = TextEditingController(text: '#${101 + storage.projects.length}');
     final addressCtrl = TextEditingController();
     final inspectorCtrl = TextEditingController();
     final clientCtrl = TextEditingController();
@@ -171,14 +171,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   margin: const EdgeInsets.only(bottom: 10),
                   child: ListTile(
                     leading: CircleAvatar(
-                      child: Text('\${proj.defects.length}'),
+                      child: Text('${proj.defects.length}'),
                     ),
                     title: Text(
-                      '\${proj.productCode} (\${proj.protocolNumber})',
+                      '${proj.productCode} (${proj.protocolNumber})',
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Text(
-                      '\${proj.protocolType}\n\${proj.address} • \${DateFormat('yyyy-MM-dd').format(proj.date)}',
+                      '${proj.protocolType}\n${proj.address} • ${DateFormat('yyyy-MM-dd').format(proj.date)}',
                     ),
                     isThreeLine: true,
                     trailing: IconButton(
