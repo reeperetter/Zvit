@@ -41,6 +41,62 @@ class _ProjectScreenState extends State<ProjectScreen> {
     );
   }
 
+  void _showExportMenu(BuildContext context, InspectionProject project) {
+    showModalBottomSheet(
+      context: context,
+      builder: (ctx) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.download, color: Colors.red),
+              title: Text(AppStrings.t('download_pdf')),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final savedPath = await PdfService.downloadPdfToDevice(project);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${AppStrings.t('saved_to')}: $savedPath')),
+                  );
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.share, color: Colors.red),
+              title: Text(AppStrings.t('export_pdf')),
+              onTap: () {
+                Navigator.pop(ctx);
+                PdfService.generateAndSharePdf(project);
+              },
+            ),
+            const Divider(height: 1),
+            ListTile(
+              leading: const Icon(Icons.download, color: Colors.green),
+              title: Text(AppStrings.t('download_excel')),
+              onTap: () async {
+                Navigator.pop(ctx);
+                final savedPath = await ExcelService.downloadExcelToDevice(project);
+                if (context.mounted && savedPath != null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${AppStrings.t('saved_to')}: $savedPath')),
+                  );
+                }
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.share, color: Colors.green),
+              title: Text(AppStrings.t('export_excel')),
+              onTap: () {
+                Navigator.pop(ctx);
+                ExcelService.generateAndShareExcel(project);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final storage = context.watch<StorageService>();
@@ -53,14 +109,21 @@ class _ProjectScreenState extends State<ProjectScreen> {
           title: Text('${project.productCode} (${project.protocolNumber})'),
           actions: [
             IconButton(
-              icon: const Icon(Icons.picture_as_pdf, color: Colors.red),
-              tooltip: AppStrings.t('export_pdf'),
-              onPressed: () => PdfService.generateAndSharePdf(project),
+              icon: const Icon(Icons.download_for_offline_outlined),
+              tooltip: AppStrings.t('download'),
+              onPressed: () async {
+                final savedPath = await PdfService.downloadPdfToDevice(project);
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('${AppStrings.t('saved_to')}: $savedPath')),
+                  );
+                }
+              },
             ),
             IconButton(
-              icon: const Icon(Icons.table_chart, color: Colors.green),
-              tooltip: AppStrings.t('export_excel'),
-              onPressed: () => ExcelService.generateAndShareExcel(project),
+              icon: const Icon(Icons.more_vert),
+              tooltip: '${AppStrings.t('download')} / ${AppStrings.t('share')}',
+              onPressed: () => _showExportMenu(context, project),
             ),
           ],
           bottom: TabBar(
@@ -136,8 +199,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
                           builder: (context, constraints) {
                             return GestureDetector(
                               onTapUp: (details) {
-                                final dx = details.localPosition.dx / constraints.maxWidth;
-                                final dy = details.localPosition.dy / constraints.maxHeight;
+                                final dx = (details.localPosition.dx / constraints.maxWidth).clamp(0.0, 1.0);
+                                final dy = (details.localPosition.dy / constraints.maxHeight).clamp(0.0, 1.0);
                                 _openDefectForm(project, planX: dx, planY: dy);
                               },
                               child: Stack(
@@ -145,15 +208,15 @@ class _ProjectScreenState extends State<ProjectScreen> {
                                   Positioned.fill(
                                     child: Image.file(
                                       File(project.floorPlanPath!),
-                                      fit: BoxFit.contain,
+                                      fit: BoxFit.fill,
                                     ),
                                   ),
                                   ...project.defects
                                       .where((d) => d.planX != null && d.planY != null)
                                       .map(
                                         (d) => Positioned(
-                                          left: d.planX! * constraints.maxWidth - 14,
-                                          top: d.planY! * constraints.maxHeight - 14,
+                                          left: (d.planX! * constraints.maxWidth) - 14,
+                                          top: (d.planY! * constraints.maxHeight) - 14,
                                           child: GestureDetector(
                                             onTap: () => _openDefectForm(project, existing: d),
                                             child: Container(
